@@ -90,7 +90,7 @@
                 formData.Add(fileContents[i], "file", fileNames[i]);
             }
 
-            var response = await Http.PostAsync("https://tresbienblob.blob.core.windows.net/azure-webjobs-hosts/locks/azurefunction20230910160852/host", formData);
+            var response = await Http.PostAsync("https://tresbienblobemail.azurewebsites.net/api/SendEmail", formData);
 
             if (response.IsSuccessStatusCode)
             {
