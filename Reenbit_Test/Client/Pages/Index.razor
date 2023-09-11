@@ -90,15 +90,24 @@
                 formData.Add(fileContents[i], "file", fileNames[i]);
             }
 
-            var response = await Http.PostAsync("https://tresbienblobemail.azurewebsites.net/api/SendEmail", formData);
+            var response = await Http.PostAsync("api/AzureBlob", formData);
 
             if (response.IsSuccessStatusCode)
             {
-                successMessage = "File(s) uploaded and email sent successfully.";
+                var emailResponse = await Http.PostAsJsonAsync("https://sendemailfunctionapp123.azurewebsites.net/api/SendEmail", emailModel);
+
+                if (emailResponse.IsSuccessStatusCode)
+                {
+                    successMessage = "File(s) uploaded and email sent successfully.";
+                }
+                else
+                {
+                    errorMessage = "Error sending email.";
+                }
             }
             else
             {
-                errorMessage = "Error sending email.";
+                errorMessage = "Error uploading files.";
             }
         }
         catch (Exception ex)
@@ -106,6 +115,48 @@
             errorMessage = $"Error: {ex.Message}";
         }
     }
+
+    // private async Task UploadFilesAndSendEmail()
+    // {
+    //     try
+    //     {
+    //         if (!string.IsNullOrWhiteSpace(errorMessage))
+    //         {
+    //             return;
+    //         }
+
+    //         if (string.IsNullOrWhiteSpace(emailModel.To) || !IsValidEmail(emailModel.To))
+    //         {
+    //             emailValidationError = "Please enter a valid email address.";
+    //             return;
+    //         }
+
+    //         emailModel.Subject = "File upload";
+    //         emailModel.Body = "File(s) uploaded successfully.";
+
+    //         var formData = new MultipartFormDataContent();
+
+    //         for (var i = 0; i < fileContents.Count; i++)
+    //         {
+    //             formData.Add(fileContents[i], "file", fileNames[i]);
+    //         }
+
+    //         var response = await Http.PostAsync("https://sendemailfunctionapp123.azurewebsites.net/api/SendEmail", formData);
+
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             successMessage = "File(s) uploaded and email sent successfully.";
+    //         }
+    //         else
+    //         {
+    //             errorMessage = "Error sending email.";
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         errorMessage = $"Error: {ex.Message}";
+    //     }
+    // }
 
     private bool IsValidEmail(string email)
     {

@@ -26,7 +26,7 @@ namespace FunctionApp1
 
         [Function("SendEmail")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req,
             FunctionContext context)
         {
             try
@@ -43,7 +43,7 @@ namespace FunctionApp1
                 email.From.Add(MailboxAddress.Parse("deshiro.chi@gmail.com"));
                 email.To.Add(MailboxAddress.Parse(emailModel.To));
                 email.Subject = emailModel.Subject;
-                email.Body = new TextPart(emailModel.Body);
+                email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailModel.Body };
 
                 await _smtpClient.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
                 await _smtpClient.AuthenticateAsync("deshiro.chi@gmail.com", "nvssaodpvcvyehap");
