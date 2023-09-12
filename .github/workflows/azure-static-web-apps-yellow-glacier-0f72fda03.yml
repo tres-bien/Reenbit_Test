@@ -4,10 +4,18 @@ on:
   push:
     branches:
       - master
+    paths:
+      - Reenbit_Test/Server
+      - Reenbit_Test/Client
+      - .github/workflows/azure-static-web-apps-yellow-glacier-0f72fda03.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - master
+    paths:
+      - Reenbit_Test/Server
+      - Reenbit_Test/Client
+      - .github/workflows/azure-static-web-apps-yellow-glacier-0f72fda03.yml
 
 jobs:
   build_and_deploy_job:
@@ -27,9 +35,9 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "Reenbit_Test/" # App source code path
-          api_location: "Reenbit_Test/" # Api source code path - optional
-          output_location: "Reenbit_Test/" # Built app content directory - optional
+          app_location: "Server" # App source code path
+          api_location: "Client" # Api source code path - optional
+          output_location: "Shared" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
