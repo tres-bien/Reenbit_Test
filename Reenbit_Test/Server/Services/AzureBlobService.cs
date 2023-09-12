@@ -1,4 +1,5 @@
 ﻿using Azure.Storage;
+using Azure.Storage.Sas;
 using Azure.Storage.Blobs;
 using Reenbit_Test.Server;
 
@@ -24,14 +25,22 @@ namespace Reenbit_Test.Services
 
             await foreach (var file in _filesContainer.GetBlobsAsync())
             {
-                string uri = _filesContainer.Uri.ToString();
-                var name = file.Name;
-                var fullUri = $"{uri}/{name}";
+                string sasToken = GenerateSasTokenForBlob(file.Name, BlobSasPermissions.Read);
+                string blobUrlWithSas = $"{_filesContainer.Uri}/{file.Name}?{sasToken}";
+                //string uri = _filesContainer.Uri.ToString();
+                //var name = file.Name;
+                //var fullUri = $"{uri}/{name}";
 
+                //files.Add(new BlobDto
+                //{
+                //    Uri = fullUri,
+                //    Name = name,
+                //    ContentType = file.Properties.ContentType
+                //});
                 files.Add(new BlobDto
                 {
-                    Uri = fullUri,
-                    Name = name,
+                    Uri = blobUrlWithSas,
+                    Name = file.Name,
                     ContentType = file.Properties.ContentType
                 });
             }
@@ -82,6 +91,22 @@ namespace Reenbit_Test.Services
             await file.DeleteAsync();
 
             return new BlobResponceDto { Error = false, Status = $"File: {blobFilename} has been successfuly deleted." };
+        }
+
+        private string GenerateSasTokenForBlob(string blobName, BlobSasPermissions permissions)
+        {
+            BlobSasBuilder sasBuilder = new BlobSasBuilder()
+            {
+                BlobContainerName = _filesContainer.Name,
+                BlobName = blobName,
+                Resource = "b",
+                StartsOn = DateTimeOffset.UtcNow,
+                ExpiresOn = DateTimeOffset.UtcNow.AddHours(1)
+            };
+
+            sasBuilder.SetPermissions(permissions);
+
+            return sasBuilder.ToSasQueryParameters(new StorageSharedKeyCredential(_storageAccount, _accessKey)).ToString();
         }
     }
 }

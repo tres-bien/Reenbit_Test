@@ -17,7 +17,7 @@ namespace Reenbit_Test.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListAllBlobs(int id)
+        public async Task<IActionResult> ListAllBlobs()
         {
             var result = await _azureBlobService.ListAsync();
             return Ok(result);
