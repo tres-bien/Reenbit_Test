@@ -16,6 +16,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Reenbit_Test\Server\Reenbit_Test.Server.csproj" />
     <ProjectReference Include="..\Reenbit_Test\Shared\Reenbit_Test.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>

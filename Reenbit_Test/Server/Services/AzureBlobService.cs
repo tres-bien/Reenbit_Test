@@ -27,16 +27,6 @@ namespace Reenbit_Test.Services
             {
                 string sasToken = GenerateSasTokenForBlob(file.Name, BlobSasPermissions.Read);
                 string blobUrlWithSas = $"{_filesContainer.Uri}/{file.Name}?{sasToken}";
-                //string uri = _filesContainer.Uri.ToString();
-                //var name = file.Name;
-                //var fullUri = $"{uri}/{name}";
-
-                //files.Add(new BlobDto
-                //{
-                //    Uri = fullUri,
-                //    Name = name,
-                //    ContentType = file.Properties.ContentType
-                //});
                 files.Add(new BlobDto
                 {
                     Uri = blobUrlWithSas,

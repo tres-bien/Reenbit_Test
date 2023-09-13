@@ -10,6 +10,8 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using Newtonsoft.Json;
 using Reenbit_Test.Shared;
+using Reenbit_Test.Services;
+using System.Text;
 
 namespace FunctionApp1
 {
@@ -24,7 +26,7 @@ namespace FunctionApp1
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        [Function("SendEmail")]
+        [Function("SendEmailWithUrl")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req,
             FunctionContext context)
@@ -39,11 +41,22 @@ namespace FunctionApp1
                     return new BadRequestResult();
                 }
 
+                var azureBlobService = new AzureBlobService();
+                var filesWithSasTokens = await azureBlobService.ListAsync();
+
+                var emailBody = new StringBuilder();
+                emailBody.AppendLine("File(s) uploaded successfully. Click the links below to access the files:");
+
+                foreach (var file in filesWithSasTokens)
+                {
+                    emailBody.AppendLine($"<a href=\"{file.Uri}\">{file.Name}</a>");
+                }
+
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse("deshiro.chi@gmail.com"));
                 email.To.Add(MailboxAddress.Parse(emailModel.To));
                 email.Subject = emailModel.Subject;
-                email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailModel.Body };
+                email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailBody.ToString() };
 
                 await _smtpClient.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
                 await _smtpClient.AuthenticateAsync("deshiro.chi@gmail.com", "nvssaodpvcvyehap");
