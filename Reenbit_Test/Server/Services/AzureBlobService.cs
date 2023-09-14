@@ -19,6 +19,11 @@ namespace Reenbit_Test.Services
             _filesContainer = blobServiceClient.GetBlobContainerClient("blobcontainer");
         }
 
+        public AzureBlobService(BlobContainerClient containerClient)
+        {
+            _filesContainer = containerClient;
+        }
+
         public async Task<List<BlobDto>> ListAsync()
         {
             List<BlobDto> files = new List<BlobDto>();
