@@ -29,7 +29,6 @@ namespace TestProject1
             _formFileMock.Setup(f => f.OpenReadStream()).Returns(() => new MemoryStream(new byte[] { 1, 2, 3 }));
         }
 
-
         [TestMethod]
         public async Task UploadAsync_UploadsFileSuccessfully()
         {

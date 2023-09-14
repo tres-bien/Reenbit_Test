@@ -22,8 +22,8 @@ namespace FunctionApp1
 
         public EmailSenderFunction(ISmtpClient smtpClient, ILogger<EmailSenderFunction> logger)
         {
-            _smtpClient = smtpClient;// ?? throw new ArgumentNullException(nameof(smtpClient));
-            _logger = logger;// ?? throw new ArgumentNullException(nameof(logger));
+            _smtpClient = smtpClient;
+            _logger = logger;
         }
 
         [Function("SendEmailWithUrl")]
