@@ -5,7 +5,7 @@ using Reenbit_Test.Server;
 
 namespace Reenbit_Test.Services
 {
-    public class AzureBlobService
+    public class AzureBlobService : IAzureBlobService
     {
         private readonly string _storageAccount = "tresbienblob";
         private readonly string _accessKey = "2Nzto2cu59r0/haG/zfLcFEynP59+5ySFUcwByNflGSRbCYWZtTDiLFQz3PlzkYOEsiDhBwZkseq+ASttjF6/Q==";

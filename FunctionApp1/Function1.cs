@@ -28,8 +28,7 @@ namespace FunctionApp1
 
         [Function("SendEmailWithUrl")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req,
-            FunctionContext context)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req)
         {
             try
             {
