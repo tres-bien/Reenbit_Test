@@ -57,8 +57,13 @@ namespace FunctionApp1
                 email.Subject = emailModel.Subject;
                 email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailBody.ToString() };
 
-                await _smtpClient.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                await _smtpClient.AuthenticateAsync("deshiro.chi@gmail.com", "nvssaodpvcvyehap");
+                string smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST")!;
+                int smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")!)!;
+                string smtpUsername = Environment.GetEnvironmentVariable("SMTP_USERNAME")!;
+                string smtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD")!;
+
+                await _smtpClient.ConnectAsync(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+                await _smtpClient.AuthenticateAsync(smtpUsername, smtpPassword);
                 await _smtpClient.SendAsync(email);
                 await _smtpClient.DisconnectAsync(true);
 
