@@ -17,10 +17,10 @@ namespace FunctionApp1
 {
     public class EmailSenderFunction
     {
-        private readonly ISmtpClient _smtpClient;
+        private readonly SmtpClient _smtpClient;
         private readonly ILogger<EmailSenderFunction> _logger;
 
-        public EmailSenderFunction(ISmtpClient smtpClient, ILogger<EmailSenderFunction> logger)
+        public EmailSenderFunction(SmtpClient smtpClient, ILogger<EmailSenderFunction> logger)
         {
             _smtpClient = smtpClient;
             _logger = logger;
